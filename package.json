@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2"
+  },
+  "name": "todolist",
+  "description": "I want to improve my skill in NodeJs so i decide to build me a ToDo List with feature that i will use everyday in my job.\r I will document every step that i do in my journey to the perfect ToDo List (for me )",
+  "version": "0.0.1",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node apps/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdijoux25/todolist.git"
+  },
+  "keywords": [
+    "todolist"
+  ],
+  "author": "mdijoux",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdijoux25/todolist/issues"
+  },
+  "homepage": "https://github.com/mdijoux25/todolist#readme"
+}
