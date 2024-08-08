@@ -10,4 +10,8 @@ const taskSchema = new mongoose.Schema({
 
 const task = mongoose.model('Task', taskSchema);
 
-module.exports = task;
+
+module.exports = {
+    model: mongoose.model("Task", taskSchema),
+    schema: taskSchema
+};

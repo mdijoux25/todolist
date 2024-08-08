@@ -1,18 +1,26 @@
 const express = require('express');
 const bodyParser = require ('body-parser');
 const connectToDatabase = require('../libraries/db');
-const package = require('../package.json')
+const package = require('../package.json');
+const Task = require ("./models/tasks")
+const TaskModel = Task.model;
 
 const app = express()
 const port = process.env.PORT || 8000
 
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json());
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 app.get('/', async(req,res) => {
   try {
     await connectToDatabase();
-    res.status(200).send("Successfull connection.")
+    TaskModel.find().then((alltasks) =>{
+      res.status(200).send(alltasks)
+    });
+    
   }catch (error){
     console.error('DB connection error', error);
      res.status(500).json({ error: 'DB connection error' });
