@@ -11,13 +11,99 @@
 <body>
 
     <h1>Your To-Do List</h1>
+
     <ul>
         <% todos.forEach(todo=> { %>
-            <li>
-                <%= todo %>
+            <li id="task-<%= todo._id %>">
+                <div class="task-view" id="view-<%= todo._id %>">
+                    <strong>
+                        <%= todo.title %>
+                    </strong>
+                    <div>
+                        <%= todo.name %>
+                    </div>
+                    <%= todo.description %> (Priority: <%= todo.priority %>)
+                            <button onclick="editTask('<%= todo._id %>')" id="editTask"><img src="/images/edit.png"
+                                    alt="Éditer" /></button>
+
+                            <form method="post" style="display: inline;">
+                                <button type="submit" id="deleteTask" formaction="/delete/<%= todo._id %>"
+                                    onclick="return confirm('Are you sure you want to delete this task?');"><img
+                                        src="/images/delete.png" alt="Supprimer" /></button>
+                            </form>
+                </div>
+                <div class="task-edit" id="edit-<%= todo._id %>" style="display: none;">
+                    <input type="text" id="edit-title-<%= todo._id %>" value="<%= todo.title %>">
+                    <input type="text" id="edit-name-<%= todo._id %>" value="<%= todo.name %>">
+                    <textarea id="edit-description-<%= todo._id %>"><%= todo.description %></textarea>
+                    <input type="text" id="edit-priority-<%= todo._id %>" value="<%= todo.priority %>">
+                    <button onclick="saveTask('<%= todo._id %>')">Save</button>
+                    <button onclick="cancelEdit('<%= todo._id %>')">Cancel</button>
+                </div>
+
             </li>
             <% }) %>
     </ul>
+
+    <form action="/addtasks" method="post">
+        <fieldset id="taskform">
+            <input type="text" name="title" placeholder="Title of the task" required>
+            <input type="text" name="name" placeholder="Task Name" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="text" name="priority" placeholder="Priority" required>
+        </fieldset>
+        <div>
+            <button type="submit" id="saveTask">Add Task</button>
+        </div>
+    </form>
+    <script>
+        function editTask(id) {
+            document.getElementById('view-' + id).style.display = 'none';
+            document.getElementById('edit-' + id).style.display = 'block';
+        }
+        function cancelEdit(id) {
+            document.getElementById('view-' + id).style.display = 'block';
+            document.getElementById('edit-' + id).style.display = 'none';
+        }
+        function saveTask(id) {
+            const title = document.getElementById('edit-title-' + id).value;
+            const name = document.getElementById('edit-name-' + id).value;
+            const description = document.getElementById('edit-description-' + id).value;
+            const priority = document.getElementById('edit-priority-' + id).value;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/edit/' + id, true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+            event.preventDefault();
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Update the task display after successful edit
+                    document.getElementById('view-' + id).innerHTML = `
+                        <strong>${title}</strong> <br>
+                        ${name} <br>
+                        ${description} (Priority: ${priority}) <br>
+                        <button onclick="editTask('${id}')"><img src="/images/edit.png" alt="Éditer" /></button>
+                         <form method="post" style="display: inline;">
+                                <button type="submit" id="deleteTask" formaction="/delete/${id}"
+                                    onclick="return confirm('Are you sure you want to delete this task?');"><img
+                                        src="/images/delete.png" alt="Supprimer" /></button>
+                            </form>
+                    `;
+                    cancelEdit(id); // Go back to view mode
+                } else {
+                    alert('Error saving task.');
+                }
+            };
+            xhr.send(JSON.stringify({
+                title: title,
+                name: name,
+                description: description,
+                priority: priority
+            }));
+        }
+
+    </script>
 </body>
 
 </html>

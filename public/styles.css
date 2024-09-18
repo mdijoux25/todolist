@@ -19,3 +19,14 @@ li {
     padding: 10px;
     border: 1px solid #ddd;
 }
+
+#taskform {
+    display: flex;
+    align-content: center;
+    width: 300px;
+}
+
+#saveTask{
+    padding: 10px 25px;
+}
+
